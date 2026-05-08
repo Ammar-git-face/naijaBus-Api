@@ -14,10 +14,16 @@ const bookingSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  passenger: {
-    name: { type: String, required: true, trim: true },
-    email: { type: String, required: true, trim: true, lowercase: true },
-    phone: { type: String, required: true, trim: true },
+  fullName:{
+    type: String,
+    required: true
+  },
+  email:{
+
+  },
+  phone:{
+    type: String,
+    required: true
   },
   bookingReference: {
     type: String,

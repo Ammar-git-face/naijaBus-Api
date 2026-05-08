@@ -5,11 +5,11 @@ const Booking = require('../models/Booking');
 // Search available buses for a route and date
 const searchBuses = async (req, res) => {
   try {
-    const { from, to, date } = req.query;
+    const { from, to, date } = req.body;
 
-    if (!from || !to || !date) {
-      return res.status(400).json({ success: false, message: 'from, to, and date are required' });
-    }
+    // if (!from || !to || !date) {
+    //   return res.status(400).json({ success: false, message: 'from, to, and date are required' });
+    // }
 
     // Find the route
     const route = await Route.findOne({ from, to, isActive: true });
@@ -57,8 +57,8 @@ const searchBuses = async (req, res) => {
 // Get seat availability for a specific bus on a specific date
 const getBusSeats = async (req, res) => {
   try {
-    const { busId } = req.params;
-    const { date } = req.query;
+    // const { busId } = req.params.busId;
+    const { date, busId } = req.body;
 
     if (!date) {
       return res.status(400).json({ success: false, message: 'date is required' });
@@ -84,7 +84,7 @@ const getBusSeats = async (req, res) => {
         takenSeats,
       },
     });
-  } catch (error) {
+} catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };

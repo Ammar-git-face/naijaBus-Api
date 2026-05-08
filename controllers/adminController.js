@@ -8,7 +8,7 @@ const getStats = async (req, res) => {
   try {
     const [totalUsers, totalBookings, totalRoutes, totalBuses] = await Promise.all([
       User.countDocuments({ role: 'user' }),
-      Booking.countDocuments(),
+      Booking.countDocuments  (),
       Route.countDocuments({ isActive: true }),
       Bus.countDocuments({ isActive: true }),
     ]);

@@ -17,7 +17,7 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:3000' }));
+app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -37,7 +37,7 @@ app.use('/api/payment', paymentRoutes);
 // Error handler (must be last)
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 1000;
 app.listen(PORT, () => {
   console.log(`🚌 NaijaBus server running on http://localhost:${PORT}`);
 });

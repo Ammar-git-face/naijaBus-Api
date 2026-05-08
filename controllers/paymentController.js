@@ -15,7 +15,7 @@ const initializePayment = async (req, res) => {
       amount: booking.totalAmount,
       currency: 'NGN',
       redirect_url: `${process.env.APP_URL}/api/payment/verify`,
-      customer: { email: booking.passenger.email, name: booking.passenger.name, phone_number: booking.passenger.phone },
+      customer: { email: booking.email, name: booking.fullName, phone_number: booking.phone },
       customizations: { title: 'NaijaBus Ticket', description: `Ticket for ${booking.bus.route.from} → ${booking.bus.route.to}` },
     };
 
@@ -58,7 +58,7 @@ const verifyPayment = async (req, res) => {
 
     await sendTicketEmail(booking, qrCodeBase64);
     res.redirect(`${process.env.FRONTEND_URL}/booking-success?ref=${booking.bookingReference}`);
-  } catch (error) {
+  } catch (error) { 
     console.error('Payment verification error:', error.message);
     res.redirect(`${process.env.FRONTEND_URL}/payment-failed`);
   }

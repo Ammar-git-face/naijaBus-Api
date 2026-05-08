@@ -4,12 +4,12 @@ const Bus = require('../models/Bus');
 // Create a new booking (status = pending until payment)
 const createBooking = async (req, res) => {
   try {
-    const { busId, travelDate, seatNumber, passenger } = req.body;
+    const { busId, travelDate, seatNumber, fullName, email, phone } = req.body;
 
-    if (!busId || !travelDate || !seatNumber || !passenger) {
+    if (!busId  || !travelDate || !seatNumber || !fullName || !email || !phone) {
       return res.status(400).json({ success: false, message: 'All fields are required' });
     }
-
+    
     const bus = await Bus.findById(busId).populate('route');
     if (!bus) {
       return res.status(404).json({ success: false, message: 'Bus not found' });
@@ -30,9 +30,10 @@ const createBooking = async (req, res) => {
       bus: busId,
       travelDate,
       seatNumber,
-      passenger,
       totalAmount: bus.pricePerSeat,
-      user: req.userId || null,
+      fullName,
+      email,
+      phone
     });
 
     res.status(201).json({ success: true, data: booking });
