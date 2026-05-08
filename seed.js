@@ -76,36 +76,54 @@ const randomBetween = (min, max) => Math.floor(Math.random() * (max - min + 1)) 
 
 const seed = async () => {
   try {
-    await connectDB();
 
     // Clear existing data
     await Route.deleteMany({});
     await Bus.deleteMany({});
+
     console.log('Cleared existing routes and buses');
 
     // Create routes
     const createdRoutes = [];
+
     for (const pair of routePairs) {
       try {
-        const route = await Route.create({ from: pair.from, to: pair.to });
+        const route = await Route.create({
+          from: pair.from,
+          to: pair.to,
+        });
+
         createdRoutes.push(route);
+
       } catch (e) {
         // Skip duplicate
       }
     }
+
     console.log(`Created ${createdRoutes.length} routes`);
 
-    // Create buses for each route (2-4 buses per route)
+    // Create buses
     let busCount = 0;
+
     for (const route of createdRoutes) {
+
       const numBuses = randomBetween(2, 4);
-      const selectedSchedules = schedules.sort(() => 0.5 - Math.random()).slice(0, numBuses);
-      const selectedCompanies = busCompanies.sort(() => 0.5 - Math.random()).slice(0, numBuses);
+
+      const selectedSchedules = schedules
+        .sort(() => 0.5 - Math.random())
+        .slice(0, numBuses);
+
+      const selectedCompanies = busCompanies
+        .sort(() => 0.5 - Math.random())
+        .slice(0, numBuses);
 
       for (let i = 0; i < numBuses; i++) {
+
         const company = selectedCompanies[i];
         const schedule = selectedSchedules[i];
+
         const priceVariance = randomBetween(-1000, 3000);
+
         await Bus.create({
           name: company.name,
           route: route._id,
@@ -114,16 +132,22 @@ const seed = async () => {
           totalSeats: randomBetween(33, 54),
           pricePerSeat: company.basePrice + priceVariance,
         });
+
         busCount++;
       }
     }
 
     console.log(`Created ${busCount} buses`);
 
-    // Create default super admin if not exists
+    // Admin creation
     const User = require('./models/User');
-    const existingAdmin = await User.findOne({ role: 'admin' });
+
+    const existingAdmin = await User.findOne({
+      role: 'admin',
+    });
+
     if (!existingAdmin) {
+
       await User.create({
         name: 'Amar Hussaini',
         email: 'Amarhussaini72@gmail.com',
@@ -131,16 +155,21 @@ const seed = async () => {
         password: 'Naija/#/123',
         role: 'admin',
       });
-      console.log('Super admin created: admin@naijabus.ng / Admin@12345');
+
+      console.log('Super admin created');
+
     } else {
+
       console.log('Admin already exists');
     }
+
     console.log('✅ Seed complete!');
-    process.exit(0);
+
   } catch (error) {
+
     console.error('Seed error:', error);
-    process.exit(1);
+
   }
 };
 
-seed();
+module.exports = seed;

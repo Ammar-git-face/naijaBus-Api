@@ -10,12 +10,13 @@ const paymentRoutes = require('./routes/paymentRoutes');
 const authRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const errorHandler = require('./middleware/errorHandler');
+const seed = require('./seed');
 
 const app = express();
-
+// seed()
 // Connect to MongoDB
 connectDB();
-
+seed();
 // Middleware
 app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(express.json());
