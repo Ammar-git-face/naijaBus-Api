@@ -57,7 +57,7 @@ const verifyPayment = async (req, res) => {
     await booking.save();
 
     await sendTicketEmail(booking, qrCodeBase64);
-    res.redirect(`${process.env.FRONTEND_URL}/booking-success?ref=${booking.bookingReference}`);
+    res.redirect(`${process.env.FRONTEND_URL}/confirmation?ref=${booking.bookingReference}`);
   } catch (error) { 
     console.error('Payment verification error:', error.message);
     res.redirect(`${process.env.FRONTEND_URL}/payment-failed`);
